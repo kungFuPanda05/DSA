@@ -13,10 +13,6 @@ public:
         if(arr[l]>=val) return l;
         return -1;
     }
-    void print(vector <int> arr){
-        for(auto val: arr) cout<<val<<" ";
-        cout<<endl;
-    }
 
     int maxWidthRamp(vector<int>& arr) {
         int n = arr.size();
@@ -27,7 +23,6 @@ public:
         int ans = 0;
         for(int i=0; i<n; i++){
             int idx = f(right, arr[i]);
-            cout<<"i = "<<i<<" idx = "<<idx<<endl;
             ans = max(ans, idx-i);
         }
         return ans;
