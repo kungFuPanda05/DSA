@@ -1,29 +1,17 @@
 class Solution {
 public:
-    int f(vector <int> &arr, int val){
-        int n = arr.size();
-        int l=0;
-        int h=n-1;
-        while(h-l>1){
-            int mid = l+(h-l)/2;
-            if(arr[mid]>=val) l=mid;
-            else h=mid;
-        }
-        if(arr[h]>=val) return h;
-        if(arr[l]>=val) return l;
-        return -1;
-    }
-
     int maxWidthRamp(vector<int>& arr) {
         int n = arr.size();
-        vector <int> right(n, arr.back());
-        for(int i=n-2; i>=0; i--){
-            right[i] = max(right[i+1], arr[i]);
+        stack <int> st;
+        for(int i=0; i<n; i++){
+            if(st.empty() || arr[i]<arr[st.top()]) st.push(i);
         }
         int ans = 0;
-        for(int i=0; i<n; i++){
-            int idx = f(right, arr[i]);
-            ans = max(ans, idx-i);
+        for(int i=n-1; i>=0; i--){
+            while(!st.empty() && arr[st.top()]<=arr[i]){
+                ans = max(ans, i-st.top());
+                st.pop();
+            }
         }
         return ans;
     }
