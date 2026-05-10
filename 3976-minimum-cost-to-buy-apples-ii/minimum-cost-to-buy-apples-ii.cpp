@@ -1,75 +1,82 @@
 class Solution {
 public:
-    const long long inf = LONG_MAX-100;
-    vector<long long> f(
-        long long src,
-        long long n,
-        vector<vector<pair<long long, long long>>> &graph
+    using ll = long long;
+    const ll INF = 4e18;
+
+    void dijkstraRec(
+        priority_queue<pair<ll, int>,
+                       vector<pair<ll, int>>,
+                       greater<pair<ll, int>>> &pq,
+        vector<ll> &dist,
+        vector<vector<pair<int, ll>>> &graph
     ) {
-        const long long INF = 4e18;
+        if (pq.empty()) return;
 
-        vector<long long> dist(n, INF);
+        auto [dis, vertex] = pq.top();
+        pq.pop();
 
-        priority_queue<
-            pair<long long, long long>,
-            vector<pair<long long, long long>>,
-            greater<pair<long long, long long>>
-        > pq;
+        if (dis == dist[vertex]) {
+            for (auto [child, wt] : graph[vertex]) {
+                if (dist[vertex] + wt < dist[child]) {
+                    dist[child] = dist[vertex] + wt;
+                    pq.push({dist[child], child});
+                }
+            }
+        }
+
+        dijkstraRec(pq, dist, graph);
+    }
+
+    vector<ll> dijkstra(int src, vector<vector<pair<int, ll>>> &graph) {
+        int n = graph.size();
+        vector<ll> dist(n, INF);
+
+        priority_queue<pair<ll, int>,
+                       vector<pair<ll, int>>,
+                       greater<pair<ll, int>>> pq;
 
         dist[src] = 0;
         pq.push({0, src});
 
-        while (!pq.empty()) {
-            auto [dis, vertex] = pq.top();
-            pq.pop();
-
-            if (dis > dist[vertex]) continue;
-
-            for (auto child : graph[vertex]) {
-                long long child_node = child.first;
-                long long wt = child.second;
-
-                if (dist[vertex] + wt < dist[child_node]) {
-                    dist[child_node] = dist[vertex] + wt;
-                    pq.push({dist[child_node], child_node});
-                }
-            }
-        }
+        dijkstraRec(pq, dist, graph);
 
         return dist;
     }
 
     vector<int> minCost(int n, vector<int>& prices, vector<vector<int>>& roads) {
-        vector <vector <pair<long long, long long>>> graph1(n);
-        vector <vector <pair<long long, long long>>> graph2(n);
-        for(auto val: roads){
-            long long u = val[0];
-            long long v = val[1];
-            long long c = val[2];
-            long long t = val[3];
+        vector<vector<pair<int, ll>>> graph1(n);
+        vector<vector<pair<int, ll>>> graph2(n);
+
+        for (auto &val : roads) {
+            int u = val[0];
+            int v = val[1];
+            ll c = val[2];
+            ll t = val[3];
+
             graph1[u].push_back({v, c});
             graph1[v].push_back({u, c});
 
-            graph2[u].push_back({v, c*t});
-            graph2[v].push_back({u, c*t});
+            graph2[u].push_back({v, c * t});
+            graph2[v].push_back({u, c * t});
         }
-        vector <int> ans;
-        for(long long i=0; i<n; i++){
-            long long temp = prices[i];
-            vector <long long> dist1 = f(i, n, graph1);
-            vector <long long> dist2 = f(i, n, graph2);
-            for(long long j=0; j<n; j++){
-                if(i==j) continue;
-                long long cost = prices[j];
-                long long ct1 = dist1[j];
-                long long ct2 = dist2[j];
-                if(ct1!=inf && ct2!=inf){
-                    temp = min(temp, prices[j] + ct1 + ct2);
-                }
 
+        vector<int> ans;
+
+        for (int i = 0; i < n; i++) {
+            vector<ll> dist1 = dijkstra(i, graph1);
+            vector<ll> dist2 = dijkstra(i, graph2);
+
+            ll best = prices[i];
+
+            for (int j = 0; j < n; j++) {
+                if (dist1[j] == INF || dist2[j] == INF) continue;
+
+                best = min(best, (ll)prices[j] + dist1[j] + dist2[j]);
             }
-            ans.push_back(temp);
+
+            ans.push_back((int)best);
         }
+
         return ans;
     }
 };
