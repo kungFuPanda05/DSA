@@ -19,12 +19,13 @@ public:
             int vertex = top.second;
             int dis = top.first;
             if(dist[vertex]<dis) continue;
-            if(vertex==target) return true;
+            if(dis > k) continue;
+            if(vertex == target) return true;
             
             for(auto childNode: graph[vertex]){ 
                 int child = childNode.first;
                 int wt = (childNode.second>threshold)?1:0;
-                if(dist[vertex]+wt < dist[child] && (dist[vertex]+wt)<=k){
+                if(dist[vertex]+wt < dist[child]){
                     dist[child] = dist[vertex]+wt;
                     pq.push({dist[child], child});
                 }
