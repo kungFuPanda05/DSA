@@ -55,7 +55,6 @@ public:
             if(f(mid)) h=mid;
             else l=mid;
         }
-        for(int i=0; i<30; i++) cout<<f(i)<<endl;
         if(f(l)) return l;
         if(f(h)) return h;
         return -1;
