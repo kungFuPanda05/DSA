@@ -11,24 +11,23 @@ public:
         if(dp[i][sum]!=-1) return dp[i][sum];
 
         int num = arr[i];
-        int ans1 = f(i+1, sum);
+        int ans = f(i+1, sum);
         int op = 0;
 
         while(num<=sum){
-            ans1 = min(ans1, op+f(i+1, sum-num));
+            ans = min(ans, op+f(i+1, sum-num));
             num *= 2;
             op++;
         }
 
         num = arr[i];
         op = 0;
-        int ans2 = f(i+1, sum);
         while(num>0){
-            ans2 = min(ans2, op+f(i+1, sum-num));
+            ans = min(ans, op+f(i+1, sum-num));
             num /= 2;
             op++;
         }
-        return dp[i][sum] = min({ans1, ans2, inf});
+        return dp[i][sum] = min({ans, inf});
     }
 
     int minOperations(vector<int>& nums, int sum) {
