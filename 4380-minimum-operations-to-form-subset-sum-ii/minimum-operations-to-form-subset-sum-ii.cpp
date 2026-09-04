@@ -21,7 +21,8 @@ public:
             long long sub_op = 0;
             long long sub_num = num;
             if(num%2==0) even++;
-            while(even<3 && sub_num<=sum){
+            else even=0;
+            while(even<2 && sub_num<=sum){
                 ans = min(ans, op+sub_op+f(i+1, sum-sub_num));
                 sub_num *= 2;
                 sub_op++;
