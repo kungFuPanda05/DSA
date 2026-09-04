@@ -14,25 +14,17 @@ public:
         long long ans = f(i+1, sum);
         long long op = 0;
 
+        int even = 0;
+
         while(num>0){
             ans = min(ans, op+f(i+1, sum-num));
             long long sub_op = 0;
             long long sub_num = num;
-            int even = 0;
-            if(num%2==0) even = 1;
-            if(even){
-                int count=3;
-                while(count--){
-                    ans = min(ans, op+sub_op+f(i+1, sum-sub_num));
-                    sub_num *= 2;
-                    sub_op++;
-                }
-            }else{
-                while(sub_num<=sum){
-                    ans = min(ans, op+sub_op+f(i+1, sum-sub_num));
-                    sub_num *= 2;
-                    sub_op++;
-                }
+            if(num%2==0) even++;
+            while(even<3 && sub_num<=sum){
+                ans = min(ans, op+sub_op+f(i+1, sum-sub_num));
+                sub_num *= 2;
+                sub_op++;
             }
             num /= 2;
             op++;
