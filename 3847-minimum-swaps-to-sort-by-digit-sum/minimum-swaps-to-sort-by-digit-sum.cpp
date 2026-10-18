@@ -28,7 +28,7 @@ public:
         unordered_map<int, int> m;
 
         for(int i=0; i<n; i++){
-            m[v[i].second] = i;
+            m[i] = v[i].second;
         }
 
         vector <int> vis(n+1, 0);
