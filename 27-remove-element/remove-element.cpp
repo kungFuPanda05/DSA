@@ -1,13 +1,16 @@
 class Solution {
 public:
-    int removeElement(vector<int>& nums, int val) {
+    int removeElement(vector<int>& arr, int val) {
+        int n = arr.size();
+        const int inf = INT_MAX-100;
         int count = 0;
-        int n = nums.size();
         for(int i=0; i<n; i++){
-            if(nums[i]!=val) count++;
-            else nums[i] = 50;
+            if(arr[i]==val){
+                count++;
+                arr[i] = inf;
+            }
         }
-        sort(nums.begin(), nums.end());
-        return count;
+        sort(arr.begin(), arr.end());
+        return n-count;
     }
 };
