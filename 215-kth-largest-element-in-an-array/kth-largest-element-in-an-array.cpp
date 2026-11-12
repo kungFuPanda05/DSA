@@ -8,8 +8,8 @@ public:
         vector <int> bkt(ma-mi+1, 0);
         for(auto val: nums) bkt[val-mi]++;
         for(int i=ma; i>=mi; i--){
-            if(k<=bkt[i-mi]) return i;
             k -= bkt[i-mi];
+            if(k<=0) return i;
         }
         return -1;
     }
