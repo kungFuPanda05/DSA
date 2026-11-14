@@ -21,7 +21,6 @@ public:
             }
             j++;
         }
-        cout<<ans<<" "<<total<<endl;
         return total-ans;
     }
 };
